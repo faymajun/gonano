@@ -1,0 +1,65 @@
+﻿syntax = "proto3";
+package Message;
+option go_package = "message";
+
+// 消息ID定义规范  消息ID必须在65535以下   0~30000由C#层和战斗服务器交互以及服务器内部使用, 其中28001~30000是战斗链接流程消息，30001~35000由Lua逻辑与服务器交互
+// 注意消息ID不要与其他消息ID文件重复
+enum MSGID {
+    Undefine_ = 0;
+    ReqGateWayClientE = 1;
+    ResGateWayClientE = 2;
+
+	// 心跳
+    ReqHeartbeatE = 1001;
+    ResHeartbeatE = 1002;
+	ReqLoginE = 1003;
+	ResLoginE = 1004;
+	ReqChatE = 1005;
+	ResChatE = 1006;
+	ResHistoryChatE = 1007;
+
+	MAX_COUNT = 65536; // 请勿超过这个值
+
+}
+
+enum MSDTYPE {
+    Heart = 0;
+    Gate = 1001;
+    Hall = 2001;
+    Earth = 3001;
+    Battle = 3002;
+    Login = 8001;
+}
+
+message ReqHeartbeat {
+    int64 uid = 1;
+}
+
+message ResHeartbeat {
+    int64 uid = 1;
+	int64 serverUnixTime = 2;
+}
+
+message Chat {
+	string name = 1;
+	string content = 2;
+}
+
+message HistroyChat {
+	repeated Chat history = 1;
+}
+
+message ReqLogin {
+	string name = 1;
+	int32 roomId = 2;
+	int64 userId = 3;
+}
+
+message ResLogin {
+  enum Result {
+    unknown = 0;
+    success = 1;
+    fail = 2;
+  }
+  Result result = 1;
+}
