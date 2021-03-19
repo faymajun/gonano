@@ -36,6 +36,10 @@ func StopTcpSession() {
 	logger.Infof("<<<sessions is stop over>>>")
 }
 
+func SessionsFuncRange(fn func(k, v interface{}) bool) {
+	sessions.Range(fn)
+}
+
 func GetSession(sid uint32) *TCPSession {
 	v, ok := sessions.Load(sid)
 	if ok {
